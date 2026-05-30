@@ -12,7 +12,7 @@
     <h1 class="text-2xl font-bold text-center mb-6">🔑 Kiểm tra giấy phép</h1>
     
     <div class="space-y-4">
-      <input type="text" id="UUID" placeholder="Nhập UDID hoặc Token..." 
+      <input type="text" id="UUID" placeholder="Nhập UDID..." 
              class="w-full px-4 py-3 bg-slate-800 rounded-xl border border-slate-700 focus:outline-none focus:border-blue-500 text-lg">
       <button onclick="checkLicense()" id="btn" 
               class="w-full bg-blue-600 hover:bg-blue-700 py-4 rounded-xl font-bold transition active:scale-[0.98]">
@@ -46,14 +46,19 @@
 
         if (data.success) {
           const isPro = data.package === 'Nâng cấp';
+          const fullToken = data.token;
+          const maskedToken = fullToken.slice(0, -6) + "******";
           resDiv.innerHTML = `
             <div class="bg-emerald-950/30 border border-emerald-500 p-5 rounded-xl text-sm space-y-2">
               <p class="text-emerald-400 font-bold text-center mb-2">✅ Đã kích hoạt</p>
               <p>Thiết bị: <span class="font-bold text-white">${data.device_model}</span></p>
               <p>Gói: <span class="font-bold ${isPro ? 'text-amber-400' : 'text-blue-400'} uppercase">${data.package}</span></p>
               <p>UDID: <span class="font-mono text-slate-300 block bg-black p-1 rounded mt-1">${data.udid}</span></p>
-              <p>Token: <span class="font-mono font-bold text-blue-400 block bg-black p-1 rounded mt-1">${data.token}</span></p>
-              
+              <p>Token: <span class="font-mono font-bold text-blue-400 block bg-black p-1 rounded mt-1">${maskedToken}</span></p>
+             <a href="meii26://activate?token=${data.token}" 
+   class="flex items-center justify-center w-full py-4 mt-4 bg-blue-600 rounded-xl font-bold hover:bg-blue-700 transition text-center shadow-lg active:scale-[0.98]">
+   Khích hoạt ứng dụng Meii26
+</a>
             </div>`;
         } else {
           resDiv.innerHTML = `<div class="bg-red-950/30 border border-red-500 p-5 rounded-xl text-center text-red-400">❌ ${data.error}</div>`;
